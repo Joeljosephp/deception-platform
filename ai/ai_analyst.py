@@ -1,4 +1,4 @@
-from prompts import PROMPT
+from .prompts import PROMPT
 
 
 def analyze_with_ai(report):

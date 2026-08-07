@@ -1,5 +1,5 @@
-from incident_report import generate_report
-from ai_analyst import analyze_with_ai
+from .incident_report import generate_report
+from .ai_analyst import analyze_with_ai
 
 
 def analyze_security_events(events):
