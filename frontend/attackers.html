@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,7 @@
 
     <title>Attackers - AI Deception Intelligence Platform</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 
 </head>
 
@@ -34,29 +35,20 @@
 
     <nav>
 
-        <a href="index.html">
-            Dashboard
-        </a>
+        <a href="{% url 'dashboard' %}"
+   class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+    Dashboard
+</a>
 
-        <a href="threats.html">
-            Threats
-        </a>
+<a href="{% url 'threats' %}"
+   class="{% if request.resolver_match.url_name == 'threats' %}active{% endif %}">
+    Threats
+</a>
 
-        <a href="attackers.html" class="active">
-            Attackers
-        </a>
-
-        <a href="#">
-            Deception
-        </a>
-
-        <a href="#">
-            Reports
-        </a>
-
-        <a href="#">
-            Settings
-        </a>
+<a href="{% url 'attackers' %}"
+   class="{% if request.resolver_match.url_name == 'attackers' %}active{% endif %}">
+    Attackers
+</a>
 
     </nav>
 
@@ -136,7 +128,7 @@
     <!-- JAVASCRIPT -->
     <!-- ================================================= -->
 
-    <script src="attackers.js"></script>
+    <script src="{% static 'attackers.js' %}"></script>
 
 </body>
 

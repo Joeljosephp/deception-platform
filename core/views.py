@@ -11,8 +11,18 @@ from .serializers import (
     SecurityEventSerializer,
     AttackerSerializer,
 )
+from django.shortcuts import render
+
+def dashboard(request):
+    return render(request, "index.html")
 
 
+def threats(request):
+    return render(request, "threats.html")
+
+
+def attackers(request):
+    return render(request, "attackers.html")
 class SecurityEventListCreateView(generics.ListCreateAPIView):
 
     queryset = SecurityEvent.objects.all().order_by("-created_at")

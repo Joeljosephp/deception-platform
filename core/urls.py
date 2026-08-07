@@ -26,7 +26,7 @@ urlpatterns = [
     path(
         "dashboard/",
         DashboardStatsView.as_view(),
-        name="dashboard"
+        name="dashboard-stats"
     ),
 
     path(
@@ -34,11 +34,11 @@ urlpatterns = [
         AttackerSimulationView.as_view(),
         name="attacker-simulate"
     ),
-    
+
     path(
     "attackers/",
     AttackerListView.as_view(),
-    name="attackers"
+    name="attackers-list"
 ),
 
 ]

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,121 +10,116 @@
 
     <title>Threats - AI Deception Intelligence Platform</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 
 </head>
 
 
 <body>
 
-<header>
-    <h1>🛡️ AI Deception Intelligence Platform</h1>
-</header>
+    <header>
+        <h1>🛡️ AI Deception Intelligence Platform</h1>
+    </header>
 
 
-<nav>
+    <nav>
 
-    <a href="index.html">
-        Dashboard
-    </a>
+        <a href="{% url 'dashboard' %}"
+   class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+    Dashboard
+</a>
 
-    <a href="threats.html" class="active">
-        Threats
-    </a>
+<a href="{% url 'threats' %}"
+   class="{% if request.resolver_match.url_name == 'threats' %}active{% endif %}">
+    Threats
+</a>
 
-    <a href="attackers.html">
-            Attackers
-        </a>
+<a href="{% url 'attackers' %}"
+   class="{% if request.resolver_match.url_name == 'attackers' %}active{% endif %}">
+    Attackers
+</a>
 
-    <a href="#">
-        Reports
-    </a>
-
-    <a href="#">
-        Settings
-    </a>
-
-</nav>
+    </nav>
 
 
-<main>
+    <main>
 
-    <section class="content-section">
+        <section class="content-section">
 
-        <h2>Detected Threats</h2>
+            <h2>Detected Threats</h2>
 
-        <div id="threat-list">
+            <div id="threat-list">
 
-            <p>
-                Loading threats...
-            </p>
+                <p>
+                    Loading threats...
+                </p>
 
-        </div>
+            </div>
 
-    </section>
+        </section>
 
-</main>
-
-
-<script>
-
-const API_URL =
-    "http://127.0.0.1:8000/api/events/?format=json";
+    </main>
 
 
-async function loadThreats() {
+    <script>
 
-    const container =
-        document.getElementById("threat-list");
-
-    try {
-
-        const response =
-            await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP error " + response.status
-            );
-        }
-
-        const events =
-            await response.json();
+        const API_URL =
+            "http://127.0.0.1:8000/api/events/?format=json";
 
 
-        container.innerHTML = "";
+        async function loadThreats() {
+
+            const container =
+                document.getElementById("threat-list");
+
+            try {
+
+                const response =
+                    await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error(
+                        "HTTP error " + response.status
+                    );
+                }
+
+                const events =
+                    await response.json();
 
 
-        if (events.length === 0) {
+                container.innerHTML = "";
 
-            container.innerHTML = `
+
+                if (events.length === 0) {
+
+                    container.innerHTML = `
                 <p>
                     No threats detected.
                 </p>
             `;
 
-            return;
-        }
+                    return;
+                }
 
 
-        events.forEach(event => {
+                events.forEach(event => {
 
-            let threatName =
-                getThreatName(event);
+                    let threatName =
+                        getThreatName(event);
 
-            let severity =
-                getSeverity(event);
+                    let severity =
+                        getSeverity(event);
 
-            let risk =
-                getRisk(event);
-
-
-            const card = document.createElement("div");
-
-            card.className = "threat-card";
+                    let risk =
+                        getRisk(event);
 
 
-            card.innerHTML = `
+                    const card = document.createElement("div");
+
+                    card.className = "threat-card";
+
+
+                    card.innerHTML = `
 
                 <div>
 
@@ -161,222 +157,222 @@ async function loadThreats() {
             `;
 
 
-            container.appendChild(card);
+                    container.appendChild(card);
 
-        });
+                });
 
-    }
+            }
 
-    catch (error) {
+            catch (error) {
 
-        console.error(
-            "Threat loading error:",
-            error
-        );
+                console.error(
+                    "Threat loading error:",
+                    error
+                );
 
-        container.innerHTML = `
+                container.innerHTML = `
             <p>
                 Could not load threats from Django.
             </p>
         `;
-    }
-}
+            }
+        }
 
 
-/* =====================================================
-   Determine Threat Name
-   ===================================================== */
+        /* =====================================================
+           Determine Threat Name
+           ===================================================== */
 
-function getThreatName(event) {
+        function getThreatName(event) {
 
-    if (
-        event.asset === "fake_api_key" ||
-        event.event_type === "honeytoken_access"
-    ) {
+            if (
+                event.asset === "fake_api_key" ||
+                event.event_type === "honeytoken_access"
+            ) {
 
-        return "Credential Theft";
+                return "Credential Theft";
 
-    }
+            }
 
 
-    if (
-        event.asset === "salary.xlsx" ||
-        event.event_type === "fake_document"
-    ) {
+            if (
+                event.asset === "salary.xlsx" ||
+                event.event_type === "fake_document"
+            ) {
 
-        return "Suspicious File Access";
+                return "Suspicious File Access";
 
-    }
+            }
 
 
-    if (event.action === "scan") {
+            if (event.action === "scan") {
 
-        return "Administrative API Scanning";
+                return "Administrative API Scanning";
 
-    }
+            }
 
 
-    return "Suspicious Activity";
-}
+            return "Suspicious Activity";
+        }
 
 
-/* =====================================================
-   Determine Description
-   ===================================================== */
+        /* =====================================================
+           Determine Description
+           ===================================================== */
 
-function getThreatDescription(event) {
+        function getThreatDescription(event) {
 
-    if (
-        event.asset === "fake_api_key" ||
-        event.event_type === "honeytoken_access"
-    ) {
+            if (
+                event.asset === "fake_api_key" ||
+                event.event_type === "honeytoken_access"
+            ) {
 
-        return "Honeytoken accessed by suspicious source";
+                return "Honeytoken accessed by suspicious source";
 
-    }
+            }
 
 
-    if (
-        event.asset === "salary.xlsx" ||
-        event.event_type === "fake_document"
-    ) {
+            if (
+                event.asset === "salary.xlsx" ||
+                event.event_type === "fake_document"
+            ) {
 
-        return "Fake confidential document accessed";
+                return "Fake confidential document accessed";
 
-    }
+            }
 
 
-    if (event.action === "scan") {
+            if (event.action === "scan") {
 
-        return "Administrative API scanning detected";
+                return "Administrative API scanning detected";
 
-    }
+            }
 
 
-    return "Suspicious security activity detected";
-}
+            return "Suspicious security activity detected";
+        }
 
 
-/* =====================================================
-   Determine Severity
-   ===================================================== */
+        /* =====================================================
+           Determine Severity
+           ===================================================== */
 
-function getSeverity(event) {
+        function getSeverity(event) {
 
-    if (event.severity) {
+            if (event.severity) {
 
-        return event.severity.toUpperCase();
+                return event.severity.toUpperCase();
 
-    }
+            }
 
 
-    if (
-        event.asset === "fake_api_key"
-    ) {
+            if (
+                event.asset === "fake_api_key"
+            ) {
 
-        return "CRITICAL";
+                return "CRITICAL";
 
-    }
+            }
 
 
-    if (
-        event.asset === "salary.xlsx" ||
-        event.action === "scan"
-    ) {
+            if (
+                event.asset === "salary.xlsx" ||
+                event.action === "scan"
+            ) {
 
-        return "HIGH";
+                return "HIGH";
 
-    }
+            }
 
 
-    return "MEDIUM";
-}
+            return "MEDIUM";
+        }
 
 
-/* =====================================================
-   Determine Risk
-   ===================================================== */
+        /* =====================================================
+           Determine Risk
+           ===================================================== */
 
-function getRisk(event) {
+        function getRisk(event) {
 
-    if (
-        event.asset === "fake_api_key"
-    ) {
+            if (
+                event.asset === "fake_api_key"
+            ) {
 
-        return 40;
+                return 40;
 
-    }
+            }
 
 
-    if (
-        event.asset === "salary.xlsx"
-    ) {
+            if (
+                event.asset === "salary.xlsx"
+            ) {
 
-        return 30;
+                return 30;
 
-    }
+            }
 
 
-    if (
-        event.action === "scan"
-    ) {
+            if (
+                event.action === "scan"
+            ) {
 
-        return 30;
+                return 30;
 
-    }
+            }
 
 
-    return 10;
-}
+            return 10;
+        }
 
 
-/* =====================================================
-   Threat Icon
-   ===================================================== */
+        /* =====================================================
+           Threat Icon
+           ===================================================== */
 
-function getThreatIcon(severity) {
+        function getThreatIcon(severity) {
 
-    if (severity === "CRITICAL") {
-        return "🔴";
-    }
+            if (severity === "CRITICAL") {
+                return "🔴";
+            }
 
-    if (severity === "HIGH") {
-        return "🟠";
-    }
+            if (severity === "HIGH") {
+                return "🟠";
+            }
 
-    if (severity === "MEDIUM") {
-        return "🟡";
-    }
+            if (severity === "MEDIUM") {
+                return "🟡";
+            }
 
-    return "🔵";
-}
+            return "🔵";
+        }
 
 
-/* =====================================================
-   Timestamp
-   ===================================================== */
+        /* =====================================================
+           Timestamp
+           ===================================================== */
 
-function formatTimestamp(timestamp) {
+        function formatTimestamp(timestamp) {
 
-    if (!timestamp) {
-        return "Unknown";
-    }
+            if (!timestamp) {
+                return "Unknown";
+            }
 
-    const date =
-        new Date(timestamp);
+            const date =
+                new Date(timestamp);
 
-    return date.toLocaleString();
+            return date.toLocaleString();
 
-}
+        }
 
 
-/* =====================================================
-   Start
-   ===================================================== */
+        /* =====================================================
+           Start
+           ===================================================== */
 
-loadThreats();
+        loadThreats();
 
-</script>
+    </script>
 
 
 </body>

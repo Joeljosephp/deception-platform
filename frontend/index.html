@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +10,7 @@
 
     <title>AI Deception Intelligence Platform</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 
 </head>
 
@@ -31,24 +32,16 @@
 
     <nav>
 
-        <a href="index.html" class="active">
+        <a href="{% url 'dashboard' %}" class="active">
             Dashboard
         </a>
 
-        <a href="threats.html">
+        <a href="{% url 'threats' %}">
             Threats
         </a>
 
-        <a href="attackers.html">
+        <a href="{% url 'attackers' %}">
             Attackers
-        </a>
-
-        <a href="#">
-            Reports
-        </a>
-
-        <a href="#">
-            Settings
         </a>
 
     </nav>
@@ -180,7 +173,7 @@
     <!-- JavaScript -->
     <!-- ================================================= -->
 
-    <script src="scripts.js"></script>
+    <script src="{% static 'scripts.js' %}"></script>
 
 </body>
 
