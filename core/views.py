@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ai.risk_engine import analyze_security_events
 
@@ -42,3 +43,25 @@ class SecurityEventListCreateView(generics.ListCreateAPIView):
             status=201,
             headers=headers,
         )
+
+class AIAnalysisView(APIView):
+
+    def get(self, request):
+
+        events = SecurityEvent.objects.all().order_by("-created_at")[:10]
+
+        event_list = []
+
+        for event in events:
+            event_list.append({
+                "timestamp": event.timestamp.isoformat(),
+                "user": event.user,
+                "source_ip": event.source_ip,
+                "action": event.action,
+                "asset": event.asset,
+                "event_type": event.event_type,
+            })
+
+        result = analyze_security_events(event_list)
+
+        return Response(result)
