@@ -1,0 +1,36 @@
+events = [
+    {
+        "timestamp": "2026-08-07T10:01:00Z",
+        "user": "john",
+        "source_ip": "192.168.1.50",
+        "action": "login",
+        "asset": "portal",
+        "event_type": "login"
+    },
+    {
+        "timestamp": "2026-08-07T10:02:00Z",
+        "user": "john",
+        "source_ip": "192.168.1.50",
+        "action": "access",
+        "asset": "fake_api_key",
+        "event_type": "honeytoken_access"
+    },
+    {
+        "timestamp": "2026-08-07T10:03:00Z",
+        "user": "john",
+        "source_ip": "192.168.1.50",
+        "action": "open",
+        "asset": "salary.xlsx",
+        "event_type": "fake_document"
+    },
+    {
+        "timestamp": "2026-08-07T10:04:00Z",
+        "user": "john",
+        "source_ip": "192.168.1.50",
+        "action": "scan",
+        "asset": "admin_api",
+        "event_type": "network_scan"
+    }
+]
+
+result = analyze_security_events(events)
