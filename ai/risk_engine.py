@@ -72,14 +72,14 @@ def analyze_security_events(events):
     print(report)
 
     # --------------------------
-    # AI Placeholder
+    # Gemini AI Analysis
     # --------------------------
 
     try:
-        analyze_with_ai(report)
+        ai_response = analyze_with_ai(report)
 
     except Exception as e:
-        print("AI module error:", e)
+        ai_response = f"Gemini Error: {e}"
 
     # --------------------------
     # MITRE Mapping
@@ -145,7 +145,8 @@ def analyze_security_events(events):
         "evidence": findings,
         "mitre": mitre,
         "recommended_actions": actions,
-        "report": report
+        "report": report,
+        "ai_summary": ai_response
     }
 
     return result

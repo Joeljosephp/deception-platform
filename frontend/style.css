@@ -1,8 +1,17 @@
+/* ==========================================================
+   RESET
+========================================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+
+/* ==========================================================
+   BODY
+========================================================== */
 
 body {
     font-family: Arial, sans-serif;
@@ -11,7 +20,10 @@ body {
     min-height: 100vh;
 }
 
-/* Header */
+
+/* ==========================================================
+   HEADER
+========================================================== */
 
 header {
     background-color: #111827;
@@ -23,7 +35,10 @@ header h1 {
     font-size: 24px;
 }
 
-/* Navigation */
+
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
 nav {
     background-color: #111827;
@@ -49,7 +64,11 @@ nav a.active {
     color: white;
     border-bottom: 2px solid #6366f1;
 }
-/* Main */
+
+
+/* ==========================================================
+   MAIN
+========================================================== */
 
 main {
     padding: 30px;
@@ -57,7 +76,7 @@ main {
     margin: auto;
 }
 
-section {
+main > section {
     margin-bottom: 30px;
 }
 
@@ -65,19 +84,27 @@ section h2 {
     margin-bottom: 15px;
 }
 
-/* Dashboard cards */
 
-main section:first-child {
+/* ==========================================================
+   DASHBOARD
+========================================================== */
+
+.dashboard-section {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
 }
 
-main section:first-child h2 {
+.dashboard-section h2 {
     grid-column: 1 / -1;
 }
 
-main section:first-child div {
+
+/* ==========================================================
+   STAT CARDS
+========================================================== */
+
+.stat-card {
     background-color: #111827;
     padding: 25px;
     border: 1px solid #263244;
@@ -86,87 +113,35 @@ main section:first-child div {
     font-weight: bold;
 }
 
-/* Other sections */
+.stat-card h3 {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
 
-main section:not(:first-child) {
+.stat-card p {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+
+/* ==========================================================
+   GENERAL SECTIONS
+========================================================== */
+
+.content-section {
     background-color: #111827;
     border: 1px solid #263244;
     border-radius: 10px;
     padding: 25px;
 }
 
-/* Events */
 
-main section:nth-child(2) p {
-    padding: 12px;
-    border-bottom: 1px solid #263244;
-}
+/* ==========================================================
+   RECENT EVENTS
+========================================================== */
 
-/* Timeline */
-
-main section:nth-child(3) p {
-    padding: 12px;
-    margin-bottom: 8px;
-    background-color: #172033;
-    border-radius: 6px;
-}
-
-/* AI Analysis */
-
-main section:nth-child(4) {
-    border-left: 4px solid #6366f1;
-}
-
-main section:nth-child(4) p {
-    margin: 12px 0;
-}
-
-main section:nth-child(4) ul {
-    margin-left: 20px;
-}
-
-main section:nth-child(4) li {
-    margin: 8px 0;
-}
-
-/* Mobile */
-
-@media (max-width: 800px) {
-
-    main section:first-child {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    nav {
-        flex-wrap: wrap;
-    }
-}
-
-@media (max-width: 500px) {
-
-    main section:first-child {
-        grid-template-columns: 1fr;
-    }
-
-    main {
-        padding: 15px;
-    }
-
-    header {
-        padding: 15px;
-    }
-}
-.stat-card h3{
-    color:#9ca3af;
-    font-size: 14px;
-    margin-bottom:  10px;
-}
-
-.stat-card p{
-    font-size:  32px;
-    font-weight: bold;
-}
-.event{
+.event {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -174,28 +149,43 @@ main section:nth-child(4) li {
     border-bottom: 1px solid #263244;
 }
 
-.event-icon{
+.event:last-child {
+    border-bottom: none;
+}
+
+.event-icon {
     font-size: 18px;
 }
 
-.event strong{
+.event strong {
     display: block;
     margin-bottom: 5px;
 }
- .event small{
+
+.event small {
     color: #9ca3af;
- }
- .timeline-item {
+}
+
+
+/* ==========================================================
+   THREAT TIMELINE
+========================================================== */
+
+.timeline-item {
     display: flex;
     gap: 20px;
     padding: 15px 0;
     border-bottom: 1px solid #263244;
 }
 
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
 .timeline-time {
     color: #818cf8;
     font-weight: bold;
-    min-width: 50px;
+    min-width: 70px;
 }
 
 .timeline-item strong {
@@ -205,7 +195,21 @@ main section:nth-child(4) li {
 
 .timeline-item small {
     color: #9ca3af;
+    display: block;
 }
+
+
+/* ==========================================================
+   AI THREAT ANALYSIS
+========================================================== */
+
+.ai-panel {
+    border-left: 4px solid #6366f1;
+}
+
+
+/* AI Summary */
+
 .ai-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -230,31 +234,52 @@ main section:nth-child(4) li {
     font-size: 20px;
 }
 
+
+/* AI Explanation */
+
 .ai-explanation,
-.ai-recommendation {
+.ai-recommendation,
+.ai-evidence,
+.ai-mitre {
     margin-top: 20px;
 }
 
 .ai-explanation h3,
-.ai-recommendation h3 {
+.ai-recommendation h3,
+.ai-evidence h3,
+.ai-mitre h3 {
     margin-bottom: 10px;
 }
 
-.ai-explanation p {
+.ai-explanation p,
+.ai-recommendation p {
     color: #cbd5e1;
     line-height: 1.6;
 }
 
-.ai-recommendation li {
+
+/* AI Lists */
+
+.ai-explanation ul,
+.ai-recommendation ul,
+.ai-evidence ul,
+.ai-mitre ul {
+    margin-left: 20px;
+}
+
+.ai-explanation li,
+.ai-recommendation li,
+.ai-evidence li,
+.ai-mitre li {
     margin: 8px 0;
     color: #cbd5e1;
 }
 
-@media (max-width: 700px) {
-    .ai-summary {
-        grid-template-columns: 1fr;
-    }
-}
+
+/* ==========================================================
+   THREAT CARDS
+========================================================== */
+
 .threat-card {
     display: flex;
     justify-content: space-between;
@@ -281,4 +306,183 @@ main section:nth-child(4) li {
 
 .threat-card small {
     color: #ef4444;
+}
+
+
+/* ==========================================================
+   ATTACKER SIMULATION BUTTONS
+========================================================== */
+
+.attack-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+}
+
+.attack-buttons button {
+    background-color: #172033;
+    color: #e5e7eb;
+    border: 1px solid #374151;
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.attack-buttons button:hover {
+    background-color: #263244;
+    border-color: #6366f1;
+    transform: translateY(-1px);
+}
+
+.attack-buttons button:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 800px) {
+
+    .dashboard-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    nav {
+        flex-wrap: wrap;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .ai-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .threat-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .attack-buttons {
+        width: 100%;
+    }
+
+    .attack-buttons button {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .dashboard-section {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    nav {
+        padding: 0 15px;
+        gap: 15px;
+    }
+}
+/* ==========================================================
+   ATTACKER SIMULATION
+========================================================== */
+
+.attack-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 240px;
+}
+
+.attack-buttons button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+    width: 240px;
+
+    background-color: #172033;
+    color: #e5e7eb;
+
+    border: 1px solid #6366f1;
+    border-radius: 8px;
+
+    padding: 12px 16px;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.attack-buttons button:hover {
+    background-color: #263244;
+    border-color: #818cf8;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.attack-buttons button:active {
+    transform: translateY(0);
+}
+
+
+/* Attacker card */
+
+#attackers-list .threat-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #111827;
+
+    border: 1px solid #263244;
+    border-radius: 10px;
+
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    #attackers-list .threat-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .attack-buttons {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .attack-buttons button {
+        width: 100%;
+    }
 }
