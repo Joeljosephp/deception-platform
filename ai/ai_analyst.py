@@ -6,19 +6,36 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def _load_env():
+    try:
+        # Look for .env in the project root (one directory up from 'ai')
+        env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+        if os.path.exists(env_path):
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        os.environ[k.strip()] = v.strip()
+    except Exception:
+        pass
+
 def analyze_with_ai(report):
     """
-    Attempt to use the Groq LLM API for analysis.
+    Attempt to use the Gemini LLM API for analysis.
     Fallback to the rule-based engine on any failure.
     """
-    api_key = os.environ.get("GROQ_API_KEY")
-    model = os.environ.get("GROQ_MODEL")
+    _load_env()
+    
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    # Default to gemini-flash-latest if not provided
+    model = os.environ.get("GEMINI_MODEL", "gemini-flash-latest").strip()
 
-    if not api_key or not model:
-        logger.warning("GROQ_API_KEY or GROQ_MODEL missing, using fallback.")
+    if not api_key:
+        logger.warning("GEMINI_API_KEY missing, using fallback.")
         return analyze_with_rule_based_fallback(report)
 
-    url = "https://api.groq.com/openai/v1/chat/completions"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
     
     system_prompt = """You are a cybersecurity incident analyst.
 
@@ -43,28 +60,32 @@ Return ONLY valid JSON using this schema:
 }"""
 
     headers = {
-        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
     data = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": report}
+        "contents": [
+            {
+                "parts": [
+                    {"text": f"{system_prompt}\n\nIncident Report:\n{report}"}
+                ]
+            }
         ],
-        "response_format": {"type": "json_object"}
+        "generationConfig": {
+            "response_mime_type": "application/json"
+        }
     }
 
     req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers=headers, method="POST")
 
     try:
-        logger.info("AI analysis requested.")
-        with urllib.request.urlopen(req, timeout=10) as response:
+        logger.info("AI analysis requested from Gemini.")
+        with urllib.request.urlopen(req, timeout=30) as response:
             response_data = response.read().decode("utf-8")
             response_json = json.loads(response_data)
             
-            content = response_json["choices"][0]["message"]["content"]
+            # Gemini returns text in response_json['candidates'][0]['content']['parts'][0]['text']
+            content = response_json["candidates"][0]["content"]["parts"][0]["text"]
             result = json.loads(content)
             
             # Simple schema validation
