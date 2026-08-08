@@ -10,5 +10,5 @@ CIPHREX uses a deterministic security analysis engine to calculate risk scores, 
 - **SQLite**: The lightweight database used for storing security events and attacker models.
 - **Risk Engine**: Deterministic rule-based engine that calculates Risk Score and Threat Level based on events (e.g., honeytoken access, admin API scans).
 - **MITRE ATT&CK Mapping**: Deterministic assignment of techniques like T1552 or T1595 to observed behaviors.
-- **LLM Analyst**: Powered by Groq, this layer provides human-readable explanations (`threat_summary`, `why_suspicious`, `recommended_response`, `analyst_assessment`) based on the incident report. It falls back to a rule-based AI analyst simulation if the API is unavailable.
-- **Groq API**: Cloud provider used for LLM inference. Accessed server-side via Python (Django backend). API Keys and configurations are managed purely through environment variables (`GROQ_API_KEY`, `GROQ_MODEL`).
+- **LLM Analyst**: Powered by Google Gemini, this layer provides human-readable explanations (`threat_summary`, `why_suspicious`, `recommended_response`, `analyst_assessment`) based on the incident report. It falls back to a rule-based AI analyst simulation if the API is unavailable.
+- **Gemini API**: Cloud provider used for LLM inference. Accessed server-side via Python (Django backend). API Keys and configurations are managed purely through environment variables (`GEMINI_API_KEY`, `GEMINI_MODEL`).
