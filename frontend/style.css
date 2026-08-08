@@ -14,38 +14,47 @@
 ========================================================== */
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #0b1120;
+    font-family: 'Inter', sans-serif;
+    background-color: #020617;
     color: #e5e7eb;
     min-height: 100vh;
 }
 
 
 /* ==========================================================
-   HEADER
+   HEADER & NAVIGATION (GLASSMORPHISM)
 ========================================================== */
 
 header {
-    background-color: #111827;
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 20px 30px;
-    border-bottom: 1px solid #263244;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 header h1 {
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #6366f1, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-
-/* ==========================================================
-   NAVIGATION
-========================================================== */
-
 nav {
-    background-color: #111827;
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 0 30px;
     display: flex;
     gap: 30px;
-    border-bottom: 1px solid #263244;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 69px; /* roughly header height */
+    z-index: 99;
 }
 
 nav a {
@@ -82,6 +91,9 @@ main > section {
 
 section h2 {
     margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f3f4f6;
 }
 
 
@@ -105,12 +117,15 @@ section h2 {
 ========================================================== */
 
 .stat-card {
-    background-color: #111827;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 25px;
-    border: 1px solid #263244;
-    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card h3 {
@@ -120,8 +135,9 @@ section h2 {
 }
 
 .stat-card p {
-    font-size: 32px;
-    font-weight: bold;
+    font-size: 36px;
+    font-weight: 800;
+    color: #f8fafc;
 }
 
 
@@ -130,10 +146,13 @@ section h2 {
 ========================================================== */
 
 .content-section {
-    background-color: #111827;
-    border: 1px solid #263244;
-    border-radius: 10px;
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
     padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -205,6 +224,19 @@ section h2 {
 
 .ai-panel {
     border-left: 4px solid #6366f1;
+    transition: all 0.5s ease;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2), inset 0 0 5px rgba(239, 68, 68, 0.1); border-left-color: #ef4444; }
+    50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), inset 0 0 10px rgba(239, 68, 68, 0.2); border-left-color: #ef4444; }
+    100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2), inset 0 0 5px rgba(239, 68, 68, 0.1); border-left-color: #ef4444; }
+}
+
+.ai-panel.critical-glow {
+    animation: pulseGlow 2s infinite;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    background: rgba(40, 15, 15, 0.8);
 }
 
 
@@ -486,3 +518,242 @@ section h2 {
         width: 100%;
     }
 }
+
+/* ==========================================================
+   REMEDIATION BUTTONS & TERMINAL
+========================================================== */
+
+.remediation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.remediation-btn {
+    background-color: #ef4444;
+    color: white;
+    border: 1px solid #ef4444;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.remediation-btn:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+}
+
+.remediation-btn:active {
+    transform: translateY(0);
+}
+
+/* Terminal Overlay */
+.terminal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+}
+
+.terminal-window {
+    width: 600px;
+    max-width: 90%;
+    background: #000;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #333;
+}
+
+.terminal-header {
+    background: #1e1e1e;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #888;
+    border-bottom: 1px solid #333;
+}
+
+.terminal-body {
+    padding: 20px;
+    color: #0f0;
+    min-height: 200px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.terminal-close-btn {
+    margin-top: 20px;
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.terminal-close-btn:hover {
+    background: #444;
+}
+
+/* ==========================================================
+   ASK THE AI CHAT
+========================================================== */
+
+.chat-panel {
+    border-top: 4px solid #818cf8;
+}
+
+#chat-history {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-msg {
+    padding: 12px 16px;
+    border-radius: 8px;
+    max-width: 80%;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.chat-msg.user {
+    background-color: #374151;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-msg.ai {
+    background-color: #172033;
+    border: 1px solid #263244;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+    color: #cbd5e1;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#chat-input {
+    flex-grow: 1;
+    background-color: #111827;
+    border: 1px solid #374151;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+#chat-send {
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#chat-send:hover {
+    background-color: #4f46e5;
+}
+
+/* ==========================================================
+   VIEW TRANSITIONS
+========================================================== */
+
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: fade-out 0.3s cubic-bezier(0.4, 0, 1, 1) both, scale-out 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(root) {
+    animation: fade-in 0.3s cubic-bezier(0, 0, 0.2, 1) 0.1s both, scale-in 0.3s cubic-bezier(0, 0, 0.2, 1) 0.1s both;
+}
+
+@keyframes fade-out {
+    to { opacity: 0; }
+}
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+@keyframes scale-out {
+    to { transform: scale(0.95); }
+}
+@keyframes scale-in {
+    from { transform: scale(1.05); }
+}
+
+/* ==========================================================
+   SCROLL REVEAL ANIMATIONS
+========================================================== */
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.5, 0, 0, 1), transform 0.6s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================
+   DYNAMIC GLOW EFFECTS
+========================================================== */
+
+.stat-card, .content-section, .attacker-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before, .content-section::before, .attacker-card::before {
+    content: '';
+    position: absolute;
+    top: var(--y, -250px);
+    left: var(--x, -250px);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle closest-side, rgba(99, 102, 241, 0.25), transparent);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card > *, .content-section > *, .attacker-card > * {
+    position: relative;
+    z-index: 1;
+}

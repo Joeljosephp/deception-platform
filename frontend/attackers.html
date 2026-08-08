@@ -13,7 +13,12 @@
 
     <title>Attackers - AI Deception Intelligence Platform</title>
 
+    <meta name="view-transition" content="same-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
 </head>
 
@@ -24,8 +29,9 @@
     <!-- HEADER -->
     <!-- ================================================= -->
 
-    <header>
-        <h1>🛡️ AI Deception Intelligence Platform</h1>
+    <header style="display: flex; align-items: center; gap: 12px;">
+        <i data-lucide="shield-alert" style="color: #4ade80; width: 32px; height: 32px;"></i>
+        <h1>AI Deception Intelligence Platform</h1>
     </header>
 
 
@@ -48,7 +54,7 @@
 <a href="{% url 'attackers' %}"
    class="{% if request.resolver_match.url_name == 'attackers' %}active{% endif %}">
     Attackers
-</a>~
+</a>
 
     </nav>
 
@@ -80,23 +86,30 @@
 
 
         <!-- ================================================= -->
-        <!-- ACTIVE ATTACKERS -->
+        <!-- Attackers Section -->
         <!-- ================================================= -->
-
-        <section class="content-section">
-
-            <h2>
-                Active Attackers
-            </h2>
-
-            <div id="attackers-list">
-
-                <p>
-                    Loading attackers...
-                </p>
-
+        <section class="content-section" style="margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Detected Adversaries</h2>
+                <button onclick="resetDatabase()" style="
+                    background-color: rgba(239, 68, 68, 0.2); 
+                    color: #ef4444;
+                    border: 1px solid #ef4444; 
+                    padding: 8px 16px; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    font-weight: 600; 
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;">
+                    <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Reset Simulation Data
+                </button>
             </div>
-
+            
+            <div id="attackers-list" class="attackers-grid">
+                <p>Loading active threats...</p>
+            </div>
         </section>
 
 
@@ -129,7 +142,9 @@
     <!-- ================================================= -->
 
     <script src="{% static 'attackers.js' %}"></script>
-
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

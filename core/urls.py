@@ -6,6 +6,8 @@ from .views import (
     DashboardStatsView,
     AttackerSimulationView,
     AttackerListView,
+    AIChatView,
+    ResetDatabaseView,
 )
 
 
@@ -21,6 +23,12 @@ urlpatterns = [
         "analysis/",
         AIAnalysisView.as_view(),
         name="analysis"
+    ),
+
+    path(
+        "chat/",
+        AIChatView.as_view(),
+        name="chat"
     ),
 
     path(
@@ -40,5 +48,11 @@ urlpatterns = [
     AttackerListView.as_view(),
     name="attackers-list"
 ),
+
+    path(
+        "reset/",
+        ResetDatabaseView.as_view(),
+        name="reset"
+    ),
 
 ]

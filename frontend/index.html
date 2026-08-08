@@ -10,7 +10,13 @@
 
     <title>AI Deception Intelligence Platform</title>
 
+    <meta name="view-transition" content="same-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
 </head>
 
@@ -21,8 +27,9 @@
     <!-- Header -->
     <!-- ================================================= -->
 
-    <header>
-        <h1>🛡️ AI Deception Intelligence Platform</h1>
+    <header style="display: flex; align-items: center; gap: 12px;">
+        <i data-lucide="shield-alert" style="color: #4ade80; width: 32px; height: 32px;"></i>
+        <h1>AI Deception Intelligence Platform</h1>
     </header>
 
 
@@ -108,6 +115,15 @@
 
         </section>
 
+        <!-- ================================================= -->
+        <!-- Analytics Chart -->
+        <!-- ================================================= -->
+        <section class="content-section" style="margin-bottom: 30px;">
+            <h2>Simulated Threats (24H)</h2>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="threatChart"></canvas>
+            </div>
+        </section>
 
         <!-- ================================================= -->
         <!-- Recent Security Events -->
@@ -165,6 +181,21 @@
 
         </section>
 
+        <!-- ================================================= -->
+        <!-- Ask the AI Chat -->
+        <!-- ================================================= -->
+
+        <section class="content-section chat-panel">
+            <h2>Ask CIPHREX-AI</h2>
+            <div id="chat-history">
+                <p style="color: #9ca3af; font-style: italic;">Ask me anything about the latest incident report...</p>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="E.g., What logs prove this was an Admin API scan?" onkeypress="if(event.key === 'Enter') sendChatMessage()" />
+                <button id="chat-send" onclick="sendChatMessage()">Send</button>
+            </div>
+        </section>
+
 
     </main>
 
@@ -174,7 +205,9 @@
     <!-- ================================================= -->
 
     <script src="{% static 'scripts.js' %}"></script>
-
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

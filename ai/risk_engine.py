@@ -43,9 +43,23 @@ def analyze_security_events(events):
             risk += 30
             findings.append("Admin API Scan")
 
+        # Fake Database
+        if asset == "customer_cc_data.db":
+            print("Fake Database Accessed (+40)")
+            risk += 40
+            findings.append("Fake Database Accessed")
+
+        # Fake Passwords File
+        if asset == "passwords.txt":
+            print("Fake Passwords File Accessed (+50)")
+            risk += 50
+            findings.append("Fake Passwords File Accessed")
+
     # --------------------------
     # Threat Classification
     # --------------------------
+    
+    risk = min(risk, 100)
 
     if risk >= 80:
         threat = "CRITICAL"
@@ -103,6 +117,18 @@ def analyze_security_events(events):
         mitre.append({
             "id": "T1595",
             "technique": "Active Scanning"
+        })
+
+    if "Fake Database Accessed" in findings:
+        mitre.append({
+            "id": "T1003",
+            "technique": "OS Credential Dumping"
+        })
+
+    if "Fake Passwords File Accessed" in findings:
+        mitre.append({
+            "id": "T1552.001",
+            "technique": "Credentials In Files"
         })
 
     # --------------------------

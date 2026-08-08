@@ -27,7 +27,7 @@ def analyze_with_ai(report):
     """
     _load_env()
     
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip().strip('"').strip("'")
     # Default to gemini-flash-latest if not provided
     model = os.environ.get("GEMINI_MODEL", "gemini-flash-latest").strip()
 
@@ -99,6 +99,23 @@ Return ONLY valid JSON using this schema:
     except Exception as e:
         logger.warning(f"AI API call failed: {e}. AI fallback triggered.")
         return analyze_with_rule_based_fallback(report)
+
+def chat_with_ai(prompt):
+    _load_env()
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip().strip('"').strip("'")
+    model = os.environ.get("GEMINI_MODEL", "gemini-flash-latest").strip()
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+    data = {"contents": [{"parts": [{"text": prompt}]}]}
+    req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            response_data = response.read().decode("utf-8")
+            response_json = json.loads(response_data)
+            content = response_json["candidates"][0]["content"]["parts"][0]["text"]
+            return {"answer": content}
+    except Exception as e:
+        logger.error(f"Gemini API chat failed: {e}")
+        return {"answer": "I'm sorry, my connection is down right now. I cannot answer your question."}
 
 
 def analyze_with_rule_based_fallback(report):

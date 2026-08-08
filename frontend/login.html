@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Login - CIPHREX</title>
+    
+    <meta name="view-transition" content="same-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #111827 0%, #020617 100%);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .login-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 100px;
+            height: 100px;
+            background: #6366f1;
+            filter: blur(50px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .login-card * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #4f46e5;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .auth-status {
+            margin-top: 20px;
+            height: 20px;
+            font-size: 14px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+    </style>
+</head>
+<body class="login-container">
+
+    <div class="login-card reveal-on-scroll">
+        <div class="logo-text">CIPHREX</div>
+        <p style="color: #9ca3af; margin-bottom: 30px; font-size: 14px;">Secure Deception Operations Center</p>
+
+        <div class="input-group">
+            <label>SOC ID</label>
+            <input type="text" id="username" placeholder="Enter Analyst ID" autocomplete="off" onkeypress="if(event.key === 'Enter') document.getElementById('password').focus()">
+        </div>
+        
+        <div class="input-group">
+            <label>PASSPHRASE</label>
+            <input type="password" id="password" placeholder="Enter Secure Passphrase" onkeypress="if(event.key === 'Enter') authenticate()">
+        </div>
+
+        <button class="login-btn" onclick="authenticate()">INITIALIZE LINK</button>
+
+        <div id="auth-status" class="auth-status" style="color: #6366f1;"></div>
+    </div>
+
+    <script>
+        // Trigger reveal animation
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                document.querySelector('.login-card').classList.add('is-visible');
+            }, 100);
+        });
+
+        function authenticate() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const status = document.getElementById('auth-status');
+            const btn = document.querySelector('.login-btn');
+
+            if(!user || !pass) {
+                status.style.color = '#ef4444';
+                status.textContent = '> ERROR: Credentials required.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+
+            // Fake authentication sequence
+            status.style.color = '#eab308';
+            status.textContent = '> Verifying RSA Keys...';
+            
+            setTimeout(() => {
+                status.style.color = '#6366f1';
+                status.textContent = '> Establishing Secure Tunnel...';
+            }, 800);
+
+            setTimeout(() => {
+                status.style.color = '#10b981';
+                status.textContent = '> ACCESS GRANTED.';
+                
+                // Redirect using View Transitions if supported
+                setTimeout(() => {
+                    window.location.href = "{% url 'dashboard' %}";
+                }, 400);
+
+            }, 1600);
+        }
+    </script>
+</body>
+</html>

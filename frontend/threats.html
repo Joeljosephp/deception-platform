@@ -10,15 +10,20 @@
 
     <title>Threats - AI Deception Intelligence Platform</title>
 
+    <meta name="view-transition" content="same-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 
 <body>
 
-    <header>
-        <h1>🛡️ AI Deception Intelligence Platform</h1>
+    <header style="display: flex; align-items: center; gap: 12px;">
+        <i data-lucide="shield-alert" style="color: #4ade80; width: 32px; height: 32px;"></i>
+        <h1>AI Deception Intelligence Platform</h1>
     </header>
 
 
@@ -333,18 +338,18 @@
         function getThreatIcon(severity) {
 
             if (severity === "CRITICAL") {
-                return "🔴";
+                return "<i data-lucide='alert-circle' style='color: #ef4444; width: 16px; height: 16px; display: inline-block; vertical-align: middle;'></i>";
             }
 
             if (severity === "HIGH") {
-                return "🟠";
+                return "<i data-lucide='alert-triangle' style='color: #f97316; width: 16px; height: 16px; display: inline-block; vertical-align: middle;'></i>";
             }
 
             if (severity === "MEDIUM") {
-                return "🟡";
+                return "<i data-lucide='alert-triangle' style='color: #eab308; width: 16px; height: 16px; display: inline-block; vertical-align: middle;'></i>";
             }
 
-            return "🔵";
+            return "<i data-lucide='info' style='color: #3b82f6; width: 16px; height: 16px; display: inline-block; vertical-align: middle;'></i>";
         }
 
 
@@ -370,7 +375,9 @@
            Start
            ===================================================== */
 
-        loadThreats();
+        loadThreats().then(() => {
+            lucide.createIcons();
+        });
 
     </script>
 

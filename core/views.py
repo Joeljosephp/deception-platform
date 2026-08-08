@@ -12,6 +12,10 @@ from .serializers import (
     AttackerSerializer,
 )
 from django.shortcuts import render
+from ai.ai_analyst import chat_with_ai
+
+def login_view(request):
+    return render(request, "login.html")
 
 def dashboard(request):
     return render(request, "index.html")
@@ -90,6 +94,38 @@ class AIAnalysisView(APIView):
         return Response(result)
 
 
+class AIChatView(APIView):
+    def post(self, request):
+        question = request.data.get("question", "")
+        
+        # Get recent events to give context
+        events = (
+            SecurityEvent.objects
+            .all()
+            .order_by("-created_at")[:10]
+        )
+        
+        event_list = []
+        for event in events:
+            event_list.append({
+                "timestamp": event.timestamp.isoformat(),
+                "user": event.user,
+                "source_ip": event.source_ip,
+                "action": event.action,
+                "asset": event.asset,
+                "event_type": event.event_type,
+            })
+            
+        from ai.incident_report import generate_report
+        # Quick fake risk/threat to just dump the event log as context
+        report = generate_report(100, "CRITICAL", [str(e) for e in event_list])
+        
+        prompt = f"System Context: You are an elite SOC AI assistant.\n\nRecent Incident Context:\n{report}\n\nUser Question: {question}"
+        
+        result = chat_with_ai(prompt)
+        return Response(result)
+
+
 class DashboardStatsView(APIView):
 
     def get(self, request):
@@ -108,12 +144,26 @@ class DashboardStatsView(APIView):
             .distinct()
             .count()
         )
+        
+        from django.utils import timezone
+        import datetime
+        now = timezone.now()
+        chart_data = []
+        for i in range(24, -1, -1):
+            start_time = now - datetime.timedelta(hours=i)
+            end_time = now - datetime.timedelta(hours=i-1)
+            count = SecurityEvent.objects.filter(timestamp__gte=start_time, timestamp__lt=end_time).count()
+            chart_data.append({
+                "time": start_time.strftime("%H:00"),
+                "count": count
+            })
 
         return Response({
-            "active_decoys": 10,
+            "active_decoys": 5,
             "threats": total_events,
             "alerts": alerts,
-            "incidents": incidents
+            "incidents": incidents,
+            "chart_data": chart_data
         })
 class AttackerListView(APIView):
 
@@ -214,6 +264,48 @@ class AttackerSimulationView(APIView):
             }
 
         # ==========================================
+        # FAKE DATABASE ATTACK
+        # ==========================================
+
+        elif attack_type == "cc_data":
+
+            event_data = {
+                "attacker": attacker.id,
+                "timestamp": request.data.get("timestamp"),
+                "user": attacker.name,
+                "source_ip": attacker.source_ip,
+                "action": "download",
+                "asset": "customer_cc_data.db",
+                "event_type": "fake_database",
+                "severity": "Critical",
+                "incident_id": request.data.get(
+                    "incident_id",
+                    ""
+                )
+            }
+
+        # ==========================================
+        # FAKE PASSWORDS FILE ATTACK
+        # ==========================================
+
+        elif attack_type == "passwords":
+
+            event_data = {
+                "attacker": attacker.id,
+                "timestamp": request.data.get("timestamp"),
+                "user": attacker.name,
+                "source_ip": attacker.source_ip,
+                "action": "open",
+                "asset": "passwords.txt",
+                "event_type": "fake_passwords",
+                "severity": "Critical",
+                "incident_id": request.data.get(
+                    "incident_id",
+                    ""
+                )
+            }
+
+        # ==========================================
         # UNKNOWN ATTACK
         # ==========================================
 
@@ -225,7 +317,9 @@ class AttackerSimulationView(APIView):
                     "available_attacks": [
                         "honeytoken",
                         "document",
-                        "scan"
+                        "scan",
+                        "cc_data",
+                        "passwords"
                     ]
                 },
                 status=400
@@ -278,3 +372,14 @@ class AttackerSimulationView(APIView):
             },
             status=201
         )
+
+class ResetDatabaseView(APIView):
+    def post(self, request):
+        try:
+            # Delete all events
+            SecurityEvent.objects.all().delete()
+            # Reset all attacker statuses
+            Attacker.objects.all().update(status="Active")
+            return Response({"message": "Database reset successfully"}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

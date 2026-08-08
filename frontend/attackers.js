@@ -36,6 +36,7 @@ async function loadAttackers() {
         attackers.forEach(attacker => {
 
             const card = document.createElement("div");
+            card.classList.add("attacker-card");
 
             // =================================================
             // Attacker Card Styling
@@ -63,8 +64,12 @@ async function loadAttackers() {
                 <h3 style="
                     margin-bottom: 10px;
                     color: #e5e7eb;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
                 ">
-                    🔴 ${attacker.name}
+                    <i data-lucide="user-x" style="color: #ef4444; width: 20px; height: 20px;"></i>
+                    ${attacker.name}
                 </h3>
 
                 <p style="
@@ -103,7 +108,7 @@ async function loadAttackers() {
 
             const honeytokenButton =
                 createAttackButton(
-                    "🪪 Honeytoken Attack",
+                    "<i data-lucide='key' style='width: 16px; height: 16px;'></i> Honeytoken Attack",
                     attacker.id,
                     "honeytoken"
                 );
@@ -115,7 +120,7 @@ async function loadAttackers() {
 
             const documentButton =
                 createAttackButton(
-                    "📄 Fake Document Attack",
+                    "<i data-lucide='file-text' style='width: 16px; height: 16px;'></i> Fake Document Attack",
                     attacker.id,
                     "document"
                 );
@@ -127,9 +132,33 @@ async function loadAttackers() {
 
             const scanButton =
                 createAttackButton(
-                    "🔎 Admin API Scan",
+                    "<i data-lucide='search' style='width: 16px; height: 16px;'></i> Admin API Scan",
                     attacker.id,
                     "scan"
+                );
+
+
+            // =================================================
+            // CC Data Button
+            // =================================================
+
+            const ccDataButton =
+                createAttackButton(
+                    "<i data-lucide='credit-card' style='width: 16px; height: 16px;'></i> Fake Database Attack",
+                    attacker.id,
+                    "cc_data"
+                );
+
+
+            // =================================================
+            // Passwords Button
+            // =================================================
+
+            const passwordsButton =
+                createAttackButton(
+                    "<i data-lucide='lock' style='width: 16px; height: 16px;'></i> Fake Passwords File",
+                    attacker.id,
+                    "passwords"
                 );
 
 
@@ -138,6 +167,8 @@ async function loadAttackers() {
             buttons.appendChild(honeytokenButton);
             buttons.appendChild(documentButton);
             buttons.appendChild(scanButton);
+            buttons.appendChild(ccDataButton);
+            buttons.appendChild(passwordsButton);
 
 
             // Add information + buttons
@@ -148,6 +179,16 @@ async function loadAttackers() {
             container.appendChild(card);
 
         });
+
+        // Initialize scroll reveal if available
+        if (typeof initScrollReveal === 'function') {
+            initScrollReveal();
+        }
+
+        // Initialize newly added icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
     }
 
@@ -185,7 +226,7 @@ function createAttackButton(
         document.createElement("button");
 
 
-    button.textContent = text;
+    button.innerHTML = text;
 
 
     // =================================================
@@ -225,6 +266,18 @@ function createAttackButton(
 
     button.style.textAlign =
         "center";
+        
+    button.style.display =
+        "flex";
+        
+    button.style.alignItems =
+        "center";
+        
+    button.style.justifyContent =
+        "center";
+        
+    button.style.gap =
+        "8px";
 
     button.style.transition =
         "all 0.2s ease";
@@ -488,3 +541,48 @@ function showAttackResult(result) {
 // =====================================================
 
 loadAttackers();
+
+// ==========================================================
+// Mouse-Tracking Glow Effect (Optimized for 60fps)
+// ==========================================================
+
+let isTicking = false;
+document.addEventListener("mousemove", e => {
+    if (!isTicking) {
+        window.requestAnimationFrame(() => {
+            document.querySelectorAll(".attacker-card").forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty("--x", `${x}px`);
+                card.style.setProperty("--y", `${y}px`);
+            });
+            isTicking = false;
+        });
+        isTicking = true;
+    }
+});
+
+// ==========================================================
+// Reset Database
+// ==========================================================
+async function resetDatabase() {
+    if (!confirm("Are you sure you want to wipe all simulation data? This cannot be undone.")) return;
+    
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/reset/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+        
+        if (response.ok) {
+            alert("Database Reset Successful.");
+            window.location.reload();
+        } else {
+            alert("Failed to reset database.");
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Error connecting to server.");
+    }
+}
