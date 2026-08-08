@@ -89,8 +89,8 @@ DATABASES = {
 db_from_env = {}
 try:
     db_from_env = dj_database_url.config(conn_max_age=600)
-except Exception as e:
-    print(f"Warning: Could not parse DATABASE_URL: {e}")
+except Exception:
+    pass
 
 DATABASES['default'].update(db_from_env)
 
